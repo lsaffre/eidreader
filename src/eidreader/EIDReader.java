@@ -24,7 +24,7 @@
 * 
 */
 
-package lino.eid;
+package src.eidreader;
 
 import java.applet.Applet;
 import java.security.Permission;
