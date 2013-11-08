@@ -10,6 +10,7 @@
 #~ JFLAGS = -d build -sourcepath src
 #~ JFLAGS = -Xlint:unchecked 
 #~ JFLAGS = -classpath ~/Downloads/eid-applet-sdk/eid-applet-service-1.0.1.GA.jar
+JFLAGS = -classpath applets/eid-applet-service.jar
 #~ JFLAGS = 
 
 JC = javac
@@ -21,7 +22,7 @@ JC = javac
 
 JARFILE = applets/EIDReader.jar
 
-CLASSES = src/eidreader/EIDReader.java 
+CLASSES = src/eidreader/EIDReader.java
 
 default: jars
 

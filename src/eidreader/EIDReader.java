@@ -143,12 +143,15 @@ class PersonalFile {
 
 class BelgianReader {
     public static final String ENCODING = "utf-8";
-    static final byte FIELD_COUNT = 16;
+    static final byte FIELD_COUNT = 18;
     private CardChannel cardChannel;
     String[] data = new String[FIELD_COUNT];
     public static final String[] fields = new String[] {
         "last_name","first_name", "other_names", "gender", "nationality",
-        "birth_date","national_id","card_id","valid_until",
+        "birth_date","national_id","card_id",
+        "valid_from",
+        "valid_until",
+        "street","zip_code",
         "birth_place", "date_issued", "ResidencePermitType",
         "remark1",
         "remark2",
@@ -279,8 +282,13 @@ class BelgianReader {
         //~ HashMap address = tlv2map(readFile(ADDRESS_FILE_ID));
         
         //~ data[6] = identity[6];
-        data[0] = identity.toString();
-        data[1] = address.toString();
+        //~ data[0] = identity.toString();
+        data[7] = identity.cardNumber; // card_id
+        data[8] = identity.cardValidityDateBegin.toString(); //valid_from
+        data[9] = identity.cardValidityDateBegin.toString(); // valid_until
+        data[10] = address.streetAndNumber; // street
+        data[11] = address.zip; // zip_code
+        //~ data[1] = address.toString();
         
 		//~ ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		//~ byte[] identityFile = readFile(IDENTITY_FILE_ID);
