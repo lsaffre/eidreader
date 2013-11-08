@@ -9,7 +9,7 @@
 
 #~ JFLAGS = -d build -sourcepath src
 #~ JFLAGS = -Xlint:unchecked 
-JFLAGS = -classpath ~/Downloads/eid-applet-sdk/eid-applet-service-1.0.1.GA.jar
+#~ JFLAGS = -classpath ~/Downloads/eid-applet-sdk/eid-applet-service-1.0.1.GA.jar
 #~ JFLAGS = 
 
 JC = javac
@@ -28,7 +28,7 @@ default: jars
 classes: $(CLASSES:.java=.class)
 
 jars: classes
-	jar cvf $(JARFILE) src/eidreader
+	jar cvfm $(JARFILE) Manifest.txt src/eidreader
 	jarsigner -storepass "`cat ~/.secret/.keystore_password`" $(JARFILE) mykey
 
 clean:
