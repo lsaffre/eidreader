@@ -1,0 +1,2 @@
+Main-Class: src.eidreader.EIDReader
+Class-Path: eid-applet-service-1.0.3.GA.jar commons-logging-1.1.3.jar commons-codec-1.8.jar
