@@ -38,6 +38,9 @@ import java.io.ByteArrayOutputStream;
 
 import java.util.Arrays;  
 import java.util.List; 
+import java.util.Calendar; 
+//~ import java.text.DateFormat; 
+import java.text.SimpleDateFormat; 
 
 import java.util.AbstractMap;
 import java.util.HashMap;
@@ -62,6 +65,7 @@ import be.fedict.eid.applet.service.Address;
 import be.fedict.eid.applet.service.Identity;
 
 
+import org.apache.commons.codec.binary.Base64;
 
   
 class EstEIDUtil {  
@@ -117,9 +121,9 @@ class PersonalFile {
   
   @Override  
   public String toString() {  
-    String s = "reader:EST\n";
+    String s = "reader: EE\n";
     for (byte i = 0; i < 16; i++) {  
-        s = s + fields[i] + ":" + data[i].trim() + "\n";
+        s = s + fields[i] + ": " + data[i].trim() + "\n";
     }
     return s;
   }  
@@ -143,21 +147,25 @@ class PersonalFile {
 
 class BelgianReader {
     public static final String ENCODING = "utf-8";
-    static final byte FIELD_COUNT = 18;
+    //~ static final byte FIELD_COUNT = 18;
     private CardChannel cardChannel;
-    String[] data = new String[FIELD_COUNT];
-    public static final String[] fields = new String[] {
-        "last_name","first_name", "other_names", "gender", "nationality",
-        "birth_date","national_id","card_id",
-        "valid_from",
-        "valid_until",
-        "street","zip_code",
-        "birth_place", "date_issued", "ResidencePermitType",
-        "remark1",
-        "remark2",
-        "remark3",
-        "remark4"
-        };
+    private Identity identity;
+    private Address address;
+    //~ private BufferedImage photo;
+    private byte[] photo;
+    //~ String[] data = new String[FIELD_COUNT];
+    //~ public static final String[] fields = new String[] {
+        //~ "last_name","first_name", "other_names", "gender", "nationality",
+        //~ "birth_date","national_id","card_id",
+        //~ "valid_from",
+        //~ "valid_until",
+        //~ "street","zip_code",
+        //~ "birth_place", "date_issued", "ResidencePermitType",
+        //~ "remark1",
+        //~ "remark2",
+        //~ "remark3",
+        //~ "remark4"
+        //~ };
     
 	private static final int BLOCK_SIZE = 0xff;
     
@@ -194,101 +202,51 @@ class BelgianReader {
     
     public static final String OOPS = "Unexpected end of TLV structure source";
     
+    //~ static final DateFormat date_format = DateFormat.getDateInstance();
+    static final SimpleDateFormat date_format = new SimpleDateFormat("yyyy-MM-dd");
     
-    //~ from http://www.rgagnon.com/javadetails/java-0596.html
-    static final String HEXES = "0123456789ABCDEF";
-    public static String getHex( byte [] raw ) {
-        if ( raw == null ) {
-            return null;
-        }
-        final StringBuilder hex = new StringBuilder( 3 * raw.length );
-        for ( final byte b : raw ) {
-            hex.append(HEXES.charAt((b & 0xF0) >> 4))
-                .append(HEXES.charAt((b & 0x0F)))
-                    .append(' ');
-        }
-        return hex.toString();
-    }    
-    
-	public static HashMap tlv2map(byte[] source) {
-        //~ inspired by http://eidlib.googlecode.com/svn/trunk/jEidlib/src/be/belgium/eid/eidcommon/TLV.java
+    public static String str2yaml( String s ) {
+        //~ if (s.length == 0): return "\"\"";
+        return s;
+    }
+    public static String cal2date( Calendar cal ) {
         
-        System.err.println("Reading " + Integer.toString(source.length) + " bytes: " + getHex(source));
-        //~ for (int i = 0;i < source.length;i++) System.err.print(Integer.toHexString(source[i])+" ");
-        //~ System.err.println("");
-        
-		int pos = 0;
-        HashMap map = new HashMap<Byte, String>();
-
-		while (pos < source.length) {
-			final byte tag = source[pos];
-            
-            pos += 1; 
-            
-            if (pos == source.length) break; // reached end of source
-            
-			int data_length = source[pos];
-            while (source[pos] == 0xFF) {
-                pos += 1; if (pos > source.length) throw new RuntimeException(OOPS);
-                data_length += source[pos];
-            }
-            
-            pos += 1; if (pos > source.length) throw new RuntimeException(OOPS);
-            
-            byte[] data = new byte[data_length];
-            System.arraycopy(source,pos,data,0,data_length);
-			if (data_length > 0) { 
-                map.put(tag, EstEIDUtil.bytesToString(data,ENCODING));
-            }
-            pos += data_length; 
-            
-			//~ if (data_length > 0) {
-				//~ byte[] data = new byte[data_length];
-				//~ for (int j = 0; j < data_length; j++) {
-					//~ data[j] = source[pos + j];
-				//~ }
-//~ 
-				//~ map.put(tag, data);
-				//~ pos += data_length;
-			//~ } else {
-				//~ pos++;
-			//~ }
-		}
-        return map;
-	}
+        return date_format.format(cal.getTime());
+        //~ return String.format("%s-%s-%s",cal.YEAR, cal.MONTH, cal.DAY_OF_MONTH);
+    }
     
-    final public boolean includePhoto = false;
+    final public boolean includePhoto = true;
     
     public BelgianReader(CardChannel channel) 
         throws CardException, IOException, UnsupportedEncodingException 
     {  
         this.cardChannel = channel;
-        for (byte i = 0; i < FIELD_COUNT; i++) {  
-            data[i] = "";
-        }
         
         byte[] identityData = readFile(IDENTITY_FILE_ID);
+        this.identity = TlvParser.parse(identityData,Identity.class);
+        
         byte[] addressData = readFile(ADDRESS_FILE_ID);
+        this.address = TlvParser.parse(addressData,Address.class);
         
         if (includePhoto) {
-            byte[] photoFile = readFile(PHOTO_FILE_ID);
-            BufferedImage photo = ImageIO.read(new ByteArrayInputStream(photoFile));
+            //~ byte[] photoFile = readFile(PHOTO_FILE_ID);
+            //~ this.photo = ImageIO.read(new ByteArrayInputStream(photoFile));
+            this.photo = readFile(PHOTO_FILE_ID);
         }
         
-        Identity identity = TlvParser.parse(identityData,Identity.class);
-        Address address = TlvParser.parse(addressData,Address.class);
         
         //~ HashMap identity = tlv2map(readFile(IDENTITY_FILE_ID));
         //~ HashMap address = tlv2map(readFile(ADDRESS_FILE_ID));
         
         //~ data[6] = identity[6];
         //~ data[0] = identity.toString();
-        data[7] = identity.cardNumber; // card_id
-        data[8] = identity.cardValidityDateBegin.toString(); //valid_from
-        data[9] = identity.cardValidityDateBegin.toString(); // valid_until
-        data[10] = address.streetAndNumber; // street
-        data[11] = address.zip; // zip_code
         //~ data[1] = address.toString();
+        //~ data[7] = identity.cardNumber; // card_id
+        //~ data[8] = cal2date(identity.cardValidityDateBegin); //valid_from
+        //~ data[9] = cal2date(identity.cardValidityDateBegin); // valid_until
+        //~ data[10] = address.streetAndNumber; // street
+        //~ data[11] = address.zip; // zip_code
+        
         
 		//~ ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		//~ byte[] identityFile = readFile(IDENTITY_FILE_ID);
@@ -390,10 +348,41 @@ class BelgianReader {
     
     @Override  
     public String toString() {  
-      String s = "reader:BEL\n";
-      for (byte i = 0; i < FIELD_COUNT; i++) {  
-          s = s + fields[i] + ":" + data[i].trim() + "\n";
-      }
+        String s = "reader: BE";
+        final Identity i = this.identity;
+        final Address a = this.address;
+        s += "\nname: " + i.name;
+        s += "\nfirstName: " + str2yaml(i.firstName);
+        s += "\nmiddleName: " + str2yaml(i.middleName);
+        s += "\nnationality: " + str2yaml(i.nationality);
+        s += "\nplaceOfBirth: " + str2yaml(i.placeOfBirth);
+        s += "\ndateOfBirth: " + cal2date(i.dateOfBirth);
+        s += "\ngender: " + i.gender.toString();
+        s += "\nnationalNumber: " + i.nationalNumber;
+        s += "\ncardNumber: " + i.cardNumber;
+        s += "\nchipNumber: " + i.chipNumber;
+        s += "\ncardDeliveryMunicipality: " + i.cardDeliveryMunicipality;
+        s += "\nnobleCondition: " + str2yaml(i.nobleCondition);
+        //~ s += "\ndocumentType: " + i.documentType.toString();
+        s += "\ndocumentType: " + Integer.toString(i.documentType.getKey());
+        s += "\nspecialStatus: " + i.specialStatus.toString();
+        s += "\nduplicate: " + str2yaml(i.duplicate);
+        s += String.format("\nspecialOrganisation: %s",i.specialOrganisation);
+        s += "\ncardValidityDateBegin: " + cal2date(i.cardValidityDateBegin);
+        s += "\ncardValidityDateEnd: " + cal2date(i.cardValidityDateEnd);
+        s += "\nstreetAndNumber: " + str2yaml(a.streetAndNumber);
+        s += "\nzip: " + a.zip;
+        s += "\nmunicipality: " + a.municipality;
+      
+        if (this.photo.length > 0) {
+            
+            byte[] enc = Base64.encodeBase64(this.photo);
+            s += "\nphoto: " + new String(enc);
+        }
+            
+      //~ for (byte i = 0; i < FIELD_COUNT; i++) {  
+          //~ s = s + fields[i] + ":" + data[i].trim() + "\n";
+      //~ }
       System.err.println(s);
       return s;
     }  
