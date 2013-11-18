@@ -1,2 +1,3 @@
 Main-Class: src.eidreader.EIDReader
 Class-Path: eid-applet-service.jar commons-logging.jar commons-codec.jar
+Trusted-Library: true

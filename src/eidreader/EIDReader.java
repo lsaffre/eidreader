@@ -60,6 +60,11 @@ import javax.smartcardio.Card;
 import javax.smartcardio.ATR;  
 
 
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+
+
+
 import be.fedict.eid.applet.service.impl.tlv.TlvParser;
 import be.fedict.eid.applet.service.Address;
 import be.fedict.eid.applet.service.Identity;
@@ -220,13 +225,19 @@ class BelgianReader {
     public BelgianReader(CardChannel channel) 
         throws CardException, IOException, UnsupportedEncodingException 
     {  
+        System.err.println("BelgianReader() constructor started");
+        
         this.cardChannel = channel;
         
         byte[] identityData = readFile(IDENTITY_FILE_ID);
+        System.err.println("identityData has been read");
         this.identity = TlvParser.parse(identityData,Identity.class);
+        System.err.println("identityData has been parsed");
         
         byte[] addressData = readFile(ADDRESS_FILE_ID);
+        System.err.println("addressData has been read");
         this.address = TlvParser.parse(addressData,Address.class);
+        System.err.println("addressData has been parsed");
         
         if (includePhoto) {
             //~ byte[] photoFile = readFile(PHOTO_FILE_ID);
@@ -424,38 +435,45 @@ public class EIDReader extends Applet {
     public String readCard() 
         //~ throws CardException, IOException 
     {
-        
-        try {
-            TerminalFactory factory = TerminalFactory.getDefault();  
-            List<CardTerminal> terminals = factory.terminals().list();          
-            CardTerminal terminal = terminals.get(0);  
-            
-            if (! terminal.isCardPresent()){  
-                return "No card found on terminal";
-                //~ return new EidReaderResponse(new String[] { "No card found on terminal" });
-            }
-            
-            Card card = terminal.connect("T=0");  
-            ATR atr = card.getATR();
-            
-            CardChannel channel = card.getBasicChannel();  
-            
-            if (BelgianReader.matchesEidAtr(atr)) {
-                BelgianReader pf = new BelgianReader(channel);
-                return pf.toString();
-            }
-            
+        return (String) AccessController.doPrivileged(new PrivilegedAction() { 
+            public Object run() {
+                try {
+                    TerminalFactory factory = TerminalFactory.getDefault();  
+                    List<CardTerminal> terminals = factory.terminals().list();          
+                    
+                    //~ throws java.lang.IndexOutOfBoundsException when there is no reader
+                    CardTerminal terminal = terminals.get(0);  
+                    
+                    if (! terminal.isCardPresent()){  
+                        return "No card found on terminal";
+                        //~ return new EidReaderResponse(new String[] { "No card found on terminal" });
+                    }
+                    
+                    Card card = terminal.connect("T=0");  
+                    ATR atr = card.getATR();
+                    
+                    CardChannel channel = card.getBasicChannel();  
+                    
+                    if (BelgianReader.matchesEidAtr(atr)) {
+                        System.err.println("It's a Belgian card");
+                        BelgianReader pf = new BelgianReader(channel);
+                        return pf.toString();
+                    }
+                    
 
-            PersonalFile pf = new PersonalFile(channel);
-            return pf.toString();
-            //~ return new String[] { pf.toString() };
-            //~ return new EidReaderResponse(pf.getData());
-            //~ return pf.getSurName();
-        } catch (Exception e) {
-            //~ return new EidReaderResponse(new String[] { e.toString() });
-            e.printStackTrace();
-            return e.toString();
-        }
+                    System.err.println("It's an Estonian card");
+                    PersonalFile pf = new PersonalFile(channel);
+                    return pf.toString();
+                    //~ return new String[] { pf.toString() };
+                    //~ return new EidReaderResponse(pf.getData());
+                    //~ return pf.getSurName();
+                } catch (Exception e) {
+                    //~ return new EidReaderResponse(new String[] { e.toString() });
+                    e.printStackTrace();
+                    return e.toString();
+                }
+            }
+        });
     }
     
 }
