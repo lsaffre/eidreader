@@ -10,8 +10,8 @@
 #~ JFLAGS = -d build -sourcepath src
 #~ JFLAGS = -Xlint:unchecked 
 #~ JFLAGS = -classpath ~/Downloads/eid-applet-sdk/eid-applet-service-1.0.1.GA.jar
+#~ JFLAGS =
 JFLAGS = -classpath applets/eid-applet-service.jar:applets/commons-codec.jar
-#~ JFLAGS = 
 
 JC = javac
 

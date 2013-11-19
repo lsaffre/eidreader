@@ -448,8 +448,10 @@ public class EIDReader extends Applet {
                         return "No card found on terminal";
                         //~ return new EidReaderResponse(new String[] { "No card found on terminal" });
                     }
-                    
-                    Card card = terminal.connect("T=0");  
+                    // "The best way to go is, as explained by Shane, to use the wildcard protocol."
+                    // https://forums.oracle.com/message/10531935
+                    Card card = terminal.connect("T=0");
+                    // Card card = terminal.connect("*");
                     ATR atr = card.getATR();
                     
                     CardChannel channel = card.getBasicChannel();  
