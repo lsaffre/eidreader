@@ -21,6 +21,11 @@
 * Parts of this code are adapted excerpts from on <https://code.google.com/p/eid-applet>
 * Copyright (C) 2008-2010 FedICT.
 * Copyright (C) 2009 Frank Cornelis.
+
+Trusted-Only: true
+Trusted-Library: true
+Main-Class: src.eidreader.EIDReader
+
 * 
 */
 
@@ -64,12 +69,10 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 
 
-
+// 20131213
 import be.fedict.eid.applet.service.impl.tlv.TlvParser;
 import be.fedict.eid.applet.service.Address;
 import be.fedict.eid.applet.service.Identity;
-
-
 import org.apache.commons.codec.binary.Base64;
 
   
@@ -156,7 +159,6 @@ class BelgianReader {
     private CardChannel cardChannel;
     private Identity identity;
     private Address address;
-    //~ private BufferedImage photo;
     private byte[] photo;
     //~ String[] data = new String[FIELD_COUNT];
     //~ public static final String[] fields = new String[] {
@@ -229,6 +231,7 @@ class BelgianReader {
         
         this.cardChannel = channel;
         
+        // 20131213
         byte[] identityData = readFile(IDENTITY_FILE_ID);
         System.err.println("identityData has been read");
         this.identity = TlvParser.parse(identityData,Identity.class);
@@ -240,8 +243,6 @@ class BelgianReader {
         System.err.println("addressData has been parsed");
         
         if (includePhoto) {
-            //~ byte[] photoFile = readFile(PHOTO_FILE_ID);
-            //~ this.photo = ImageIO.read(new ByteArrayInputStream(photoFile));
             this.photo = readFile(PHOTO_FILE_ID);
         }
         
@@ -333,9 +334,6 @@ class BelgianReader {
 		} while (BLOCK_SIZE == data.length);
 		return baos.toByteArray();
 	}
-
-    
-
     
 
 	private ResponseAPDU transmit(CommandAPDU commandApdu) throws CardException {
@@ -361,39 +359,37 @@ class BelgianReader {
     public String toString() {  
         String s = "reader: BE";
         final Identity i = this.identity;
-        final Address a = this.address;
-        s += "\nname: " + i.name;
-        s += "\nfirstName: " + str2yaml(i.firstName);
-        s += "\nmiddleName: " + str2yaml(i.middleName);
-        s += "\nnationality: " + str2yaml(i.nationality);
-        s += "\nplaceOfBirth: " + str2yaml(i.placeOfBirth);
-        s += "\ndateOfBirth: " + cal2date(i.dateOfBirth);
-        s += "\ngender: " + i.gender.toString();
-        s += "\nnationalNumber: " + i.nationalNumber;
-        s += "\ncardNumber: " + i.cardNumber;
-        s += "\nchipNumber: " + i.chipNumber;
-        s += "\ncardDeliveryMunicipality: " + i.cardDeliveryMunicipality;
-        s += "\nnobleCondition: " + str2yaml(i.nobleCondition);
-        //~ s += "\ndocumentType: " + i.documentType.toString();
-        s += "\ndocumentType: " + Integer.toString(i.documentType.getKey());
-        s += "\nspecialStatus: " + i.specialStatus.toString();
-        s += "\nduplicate: " + str2yaml(i.duplicate);
-        s += String.format("\nspecialOrganisation: %s",i.specialOrganisation);
-        s += "\ncardValidityDateBegin: " + cal2date(i.cardValidityDateBegin);
-        s += "\ncardValidityDateEnd: " + cal2date(i.cardValidityDateEnd);
-        s += "\nstreetAndNumber: " + str2yaml(a.streetAndNumber);
-        s += "\nzip: " + a.zip;
-        s += "\nmunicipality: " + a.municipality;
-      
-        if (this.photo.length > 0) {
-            
-            byte[] enc = Base64.encodeBase64(this.photo);
-            s += "\nphoto: " + new String(enc);
-        }
-            
-      //~ for (byte i = 0; i < FIELD_COUNT; i++) {  
-          //~ s = s + fields[i] + ":" + data[i].trim() + "\n";
-      //~ }
+         final Address a = this.address;
+         s += "\nname: " + i.name;
+         s += "\nfirstName: " + str2yaml(i.firstName);
+         s += "\nmiddleName: " + str2yaml(i.middleName);
+         s += "\nnationality: " + str2yaml(i.nationality);
+         s += "\nplaceOfBirth: " + str2yaml(i.placeOfBirth);
+         s += "\ndateOfBirth: " + cal2date(i.dateOfBirth);
+         s += "\ngender: " + i.gender.toString();
+         s += "\nnationalNumber: " + i.nationalNumber;
+         s += "\ncardNumber: " + i.cardNumber;
+         s += "\nchipNumber: " + i.chipNumber;
+         s += "\ncardDeliveryMunicipality: " + i.cardDeliveryMunicipality;
+         s += "\nnobleCondition: " + str2yaml(i.nobleCondition);
+         //~ s += "\ndocumentType: " + i.documentType.toString();
+         s += "\ndocumentType: " + Integer.toString(i.documentType.getKey());
+         s += "\nspecialStatus: " + i.specialStatus.toString();
+         s += "\nduplicate: " + str2yaml(i.duplicate);
+         s += String.format("\nspecialOrganisation: %s",i.specialOrganisation);
+         s += "\ncardValidityDateBegin: " + cal2date(i.cardValidityDateBegin);
+         s += "\ncardValidityDateEnd: " + cal2date(i.cardValidityDateEnd);
+         s += "\nstreetAndNumber: " + str2yaml(a.streetAndNumber);
+         s += "\nzip: " + a.zip;
+         s += "\nmunicipality: " + a.municipality;
+         if (this.photo.length > 0) {
+             byte[] enc = Base64.encodeBase64(this.photo);
+             s += "\nphoto: " + new String(enc);
+         }
+          
+      //for (byte i = 0; i < FIELD_COUNT; i++) {  
+        //~ s = s + fields[i] + ":" + data[i].trim() + "\n";
+      //}
       System.err.println(s);
       return s;
     }  
@@ -401,12 +397,12 @@ class BelgianReader {
 }
 
 public class EIDReader extends Applet {
-//~ class EstEID {
       
     public void unused_init() {
-        System.err.println("Gonna disable the security manager...");
-        System.setSecurityManager(null);
-        System.err.println("Security manager has been disabled ");
+        // System.err.println("Gonna disable the security manager...");
+        // System.setSecurityManager(null);
+        // System.err.println("Security manager has been disabled ");
+        System.err.println("EIDReader initialized");
     }
     
     public void unused2_init() {
@@ -433,8 +429,8 @@ public class EIDReader extends Applet {
     }
     
     public String readCard() 
-        //~ throws CardException, IOException 
     {
+        System.err.println("EIDReader.readCard()");
         return (String) AccessController.doPrivileged(new PrivilegedAction() { 
             public Object run() {
                 try {
@@ -451,7 +447,9 @@ public class EIDReader extends Applet {
                     // "The best way to go is, as explained by Shane, to use the wildcard protocol."
                     // https://forums.oracle.com/message/10531935
                     Card card = terminal.connect("T=0");
+                    // Card card = terminal.connect("T=1");
                     // Card card = terminal.connect("*");
+                    System.err.println("Protocol: " + card.getProtocol());
                     ATR atr = card.getATR();
                     
                     CardChannel channel = card.getBasicChannel();  
@@ -469,7 +467,7 @@ public class EIDReader extends Applet {
                     //~ return new String[] { pf.toString() };
                     //~ return new EidReaderResponse(pf.getData());
                     //~ return pf.getSurName();
-                } catch (Exception e) {
+                } catch (Throwable e) {
                     //~ return new EidReaderResponse(new String[] { e.toString() });
                     e.printStackTrace();
                     return e.toString();

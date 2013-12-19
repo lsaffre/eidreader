@@ -10,10 +10,12 @@
 #~ JFLAGS = -d build -sourcepath src
 #~ JFLAGS = -Xlint:unchecked 
 #~ JFLAGS = -classpath ~/Downloads/eid-applet-sdk/eid-applet-service-1.0.1.GA.jar
-#~ JFLAGS =
+# JFLAGS =
 JFLAGS = -classpath applets/eid-applet-service.jar:applets/commons-codec.jar
 
 JC = javac
+#ALIAS = mykey
+ALIAS = codegears
 
 .SUFFIXES: .java .class
 
@@ -22,16 +24,19 @@ JC = javac
 
 JARFILE = applets/EIDReader.jar
 
-CLASSES = src/eidreader/EIDReader.java
+SOURCES = src/eidreader/EIDReader.java
+
+OBJECTS = Manifest.txt $(SOURCES:.java=*.class) src/eidreader/PersonalFile.class src/eidreader/BelgianReader.class src/eidreader/EstEIDUtil.class
 
 default: jars
 
-classes: $(CLASSES:.java=.class)
+classes: $(SOURCES:.java=.class)
 
 jars: classes
-	jar cvfm $(JARFILE) Manifest.txt src/eidreader
-	jarsigner -storepass "`cat ~/.secret/.keystore_password`" $(JARFILE) mykey
+	jar cvfm applets/EIDReader-unsigned.jar $(OBJECTS)
+	jar cvfm $(JARFILE) $(OBJECTS)
+	jarsigner -tsa http://timestamp.globalsign.com/scripts/timestamp.dll -storepass "`cat ~/.secret/.keystore_password`" $(JARFILE) $(ALIAS)
 
 clean:
 	rm src/eidreader/*.class
-	rm $(JARFILE)
+	rm $(JARFILE) applets/EIDReader-unsigned.jar
