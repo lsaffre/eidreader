@@ -1,0 +1,36 @@
+// java.security.AccessControlException: access denied ("javax.smartcardio.CardPermission" "OMNIKEY CardMan 1021 0" "connect")
+grant codeBase "file:///t:/applets/*" {
+//	permission java.security.AllPermission;
+	permission javax.smartcardio.CardPermission "OMNIKEY CardMan 1021 0", "connect";
+}; 
+
+
+java.security.AccessControlException: access denied ("javax.smartcardio.CardPermission" "OMNIKEY CardMan 1021 0" "connect")
+	at java.security.AccessControlContext.checkPermission(Unknown Source)
+	at java.security.AccessController.checkPermission(Unknown Source)
+	at java.lang.SecurityManager.checkPermission(Unknown Source)
+	at sun.plugin2.applet.AWTAppletSecurityManager.checkPermission(Unknown Source)
+	at sun.security.smartcardio.TerminalImpl.connect(Unknown Source)
+	at src.eidreader.EIDReader.readCard(EIDReader.java:438)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at sun.plugin.javascript.Trampoline.invoke(Unknown Source)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at sun.plugin.javascript.JSClassLoader.invoke(Unknown Source)
+	at sun.plugin2.liveconnect.JavaClass$MethodInfo.invoke(Unknown Source)
+	at sun.plugin2.liveconnect.JavaClass$MemberBundle.invoke(Unknown Source)
+	at sun.plugin2.liveconnect.JavaClass.invoke0(Unknown Source)
+	at sun.plugin2.liveconnect.JavaClass.invoke(Unknown Source)
+	at sun.plugin2.main.client.LiveConnectSupport$PerAppletInfo$DefaultInvocationDelegate.invoke(Unknown Source)
+	at sun.plugin2.main.client.LiveConnectSupport$PerAppletInfo$3.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at sun.plugin2.main.client.LiveConnectSupport$PerAppletInfo.doObjectOp(Unknown Source)
+	at sun.plugin2.main.client.LiveConnectSupport$PerAppletInfo$LiveConnectWorker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+
+

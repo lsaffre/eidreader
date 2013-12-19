@@ -40,3 +40,6 @@ jars: classes
 clean:
 	rm src/eidreader/*.class
 	rm $(JARFILE) applets/EIDReader-unsigned.jar
+
+sync:
+	cp -vur applets/* ~/vbshared2/drives/T/applets/
