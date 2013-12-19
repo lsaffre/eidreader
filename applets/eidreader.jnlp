@@ -19,5 +19,4 @@
      height="1">
  </applet-desc>
  <update check="background"/>
-<security><all-permissions></security>
 </jnlp>

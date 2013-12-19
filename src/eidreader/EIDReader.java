@@ -394,7 +394,7 @@ class BelgianReader {
 
 public class EIDReader extends Applet {
       
-    public void unused_init() {
+    public void init() {
         // System.err.println("Gonna disable the security manager...");
         // System.setSecurityManager(null);
         // System.err.println("Security manager has been disabled ");
