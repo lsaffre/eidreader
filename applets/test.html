@@ -7,7 +7,7 @@ function readCard() {
   console.log('Going to call document.applets.EIDReader.readCard()');
   console.log(document.applets.EIDReader);
   console.log(document.applets.EIDReader.isActive);
-  var data = document.applets.EIDReader.readCard();
+  var data = document.EIDReader.readCard();
   console.log(data);
   alert(data);
 }
@@ -16,9 +16,9 @@ function readCard() {
 <body>
 
 <applet name="EIDReader"
-code="src.eidreader.EIDReader.class" 
+  code="src.eidreader.EIDReader.class" 
   archive="EIDReader.jar" 
-  width="0" height="0">
+  width="200" height="200">
 <!-- 
 The value of the ARCHIVE attribute is a URL of a JAR file.
 -->  

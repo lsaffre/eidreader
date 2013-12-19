@@ -22,10 +22,6 @@
 * Copyright (C) 2008-2010 FedICT.
 * Copyright (C) 2009 Frank Cornelis.
 
-Trusted-Only: true
-Trusted-Library: true
-Main-Class: src.eidreader.EIDReader
-
 * 
 */
 

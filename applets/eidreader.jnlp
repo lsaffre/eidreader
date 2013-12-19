@@ -2,22 +2,22 @@
 <jnlp spec="1.0+">
 <information>
     <title>EIDReader</title>
-    <vendor>Code Gears / Rumma & Ko</vendor>
+    <vendor>Code Gears / Rumma &amp; Ko</vendor>
+    <offline-allowed/>
 </information>
 <resources>
     <!-- Application Resources -->
-    <!-- 
-    <j2se version="1.6+"
+    <j2se version="1.7+"
           href="http://java.sun.com/products/autodl/j2se"/>
-    -->
     <jar href="EIDReader.jar" main="true" />
 
 </resources>
 <applet-desc 
      name="EIDReader"
-     main-class="src.eidreader.EIDReader.class"
+     main-class="src.eidreader.EIDReader"
      width="1"
      height="1">
  </applet-desc>
- <-- <update check="background"/> -->
+ <update check="background"/>
+<security><all-permissions></security>
 </jnlp>

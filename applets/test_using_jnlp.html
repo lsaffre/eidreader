@@ -1,7 +1,15 @@
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
-<title>EIDReader applet</title>
+<title>EIDReader applet using JNLP</title>
+<script src="https://www.java.com/js/deployJava.js"></script>
+<script> 
+  var attributes = {
+    code: 'src.eidreader.EIDReader',  
+    width:1, height:1};
+    var parameters = {jnlp_href: 'eidreader.jnlp'};
+    deployJava.runApplet(attributes, parameters, '1.7'); 
+</script>
 <script type="text/javascript">
 function readCard() {
   console.log('Going to call document.applets.EIDReader.readCard()');
@@ -12,17 +20,15 @@ function readCard() {
   alert(data);
 }
 </script>
+
+
 </head>
 <body>
 
-<applet name="EIDReader" jnlp_href="EIDReader.jnlp">
-<!-- 
-The value of the ARCHIVE attribute is a URL of a JAR file.
--->  
-<p>Sorry, you need a Java-enabled browser to run this applet.</p>
-</applet>
+
 <div>
-<p align="center"><a href="javascript:readCard()">Click here after having inserted your eID card</a></p>
+<p align="center"><a href="javascript:readCard()">Click here after 
+having inserted your eID card</a></p>
 </div>
 </body>
 </html>
