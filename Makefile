@@ -13,6 +13,7 @@
 # JFLAGS =
 JFLAGS = -classpath applets/eid-applet-service.jar:applets/commons-codec.jar
 
+
 JC = javac
 #ALIAS = mykey
 ALIAS = codegears
@@ -24,6 +25,8 @@ ALIAS = codegears
 
 JARFILE = applets/EIDReader.jar
 
+SIGNERFLAGS = -tsa http://timestamp.globalsign.com/scripts/timestamp.dll -storepass "`cat ~/.secret/.keystore_password`"
+
 SOURCES = src/eidreader/EIDReader.java
 
 OBJECTS = Manifest.txt $(SOURCES:.java=*.class) src/eidreader/PersonalFile.class src/eidreader/BelgianReader.class src/eidreader/EstEIDUtil.class
@@ -33,9 +36,13 @@ default: jars
 classes: $(SOURCES:.java=.class)
 
 jars: classes
-	jar cvfm applets/EIDReader-unsigned.jar $(OBJECTS)
+#	jar cvfm applets/EIDReader-unsigned.jar $(OBJECTS)
 	jar cvfm $(JARFILE) $(OBJECTS)
-	jarsigner -tsa http://timestamp.globalsign.com/scripts/timestamp.dll -storepass "`cat ~/.secret/.keystore_password`" $(JARFILE) $(ALIAS)
+	jarsigner $(SIGNERFLAGS) $(JARFILE) $(ALIAS)
+	jarsigner $(SIGNERFLAGS) applets/eid-applet-service.jar $(ALIAS)
+	jarsigner $(SIGNERFLAGS) applets/commons-codec.jar $(ALIAS)
+	jarsigner $(SIGNERFLAGS) applets/commons-logging.jar $(ALIAS)
+
 
 clean:
 	rm src/eidreader/*.class
