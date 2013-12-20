@@ -29,7 +29,7 @@ Both commons projects are licensed under the `Apache license 2.0
 <http://www.apache.org/licenses/LICENSE-2.0>`_ which states that we
 "must give any other recipients of the Work or Derivative Works a
 copy of this License", so here it is:
-:srcref:`LICENSE-2.0.txt`.
+`LICENSE-2.0.txt <https://github.com/lsaffre/eidreader/blob/master/applets/LICENSE-2.0.txt>`__.
 
 AFAICS I don't need to also redistribute the source code of these jar
 files, but here is how you can get them yourself:

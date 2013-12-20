@@ -10,6 +10,9 @@
     <j2se version="1.7+"
           href="http://java.sun.com/products/autodl/j2se"/>
     <jar href="EIDReader.jar" main="true" />
+    <jar href="commons-logging.jar" download="lazy" main="false" />
+    <jar href="commons-codec.jar" download="lazy" main="false" />
+    <jar href="eid-applet-service.jar" download="lazy" main="false" />
 
 </resources>
 <applet-desc 
