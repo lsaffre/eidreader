@@ -6,4 +6,5 @@ eid-applet-*.jar
 *.war
 *.ear
 *.pyc
+*~
 
