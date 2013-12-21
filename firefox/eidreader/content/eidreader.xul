@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<overlay id="Scrapper-Overlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script type="application/x-javascript" 
+          src="chrome://eidreader/content/eidreader.js" />
+  <toolbox id="navigator-toolbox">
+    <toolbar id="EIDReaderToolbar" toolbarname="EIDReader Toolbar" >
+      <label value="EIDReader Toolbar: "/>
+      <textbox id="EIDReaderQuery" cols="1" size="50" />
+      <toolbarbutton id="EIDReaderButton"
+                     label="Search" 
+                     oncommand="EIDReaderSearch(event)" />
+    </toolbar>
+  </toolbox>
+</overlay>

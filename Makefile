@@ -50,3 +50,7 @@ clean:
 
 sync:
 	cp -vur applets/* ~/vbshared2/drives/T/applets/
+
+xpi:
+	cd firefox/eidreader ; make xpi
+
