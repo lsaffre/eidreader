@@ -354,47 +354,47 @@ class BelgianReader {
     
     @Override  
     public String toString() {  
-        String s = "reader: BE";
         final Identity i = this.identity;
-         final Address a = this.address;
-         s += "\nname: " + i.name;
-         s += "\nfirstName: " + str2yaml(i.firstName);
-         s += "\nmiddleName: " + str2yaml(i.middleName);
-         s += "\nnationality: " + str2yaml(i.nationality);
-         s += "\nplaceOfBirth: " + str2yaml(i.placeOfBirth);
-         s += "\ndateOfBirth: " + cal2date(i.dateOfBirth);
-         s += "\ngender: " + i.gender.toString();
-         s += "\nnationalNumber: " + i.nationalNumber;
-         s += "\ncardNumber: " + i.cardNumber;
-         s += "\nchipNumber: " + i.chipNumber;
-         s += "\ncardDeliveryMunicipality: " + i.cardDeliveryMunicipality;
-         s += "\nnobleCondition: " + str2yaml(i.nobleCondition);
-         //~ s += "\ndocumentType: " + i.documentType.toString();
-         s += "\ndocumentType: " + Integer.toString(i.documentType.getKey());
-         s += "\nspecialStatus: " + i.specialStatus.toString();
-         s += "\nduplicate: " + str2yaml(i.duplicate);
-         s += String.format("\nspecialOrganisation: %s",i.specialOrganisation);
-         s += "\ncardValidityDateBegin: " + cal2date(i.cardValidityDateBegin);
-         s += "\ncardValidityDateEnd: " + cal2date(i.cardValidityDateEnd);
-         s += "\nstreetAndNumber: " + str2yaml(a.streetAndNumber);
-         s += "\nzip: " + a.zip;
-         s += "\nmunicipality: " + a.municipality;
-         if (this.photo.length > 0) {
-             byte[] enc = Base64.encodeBase64(this.photo);
-             s += "\nphoto: " + new String(enc);
-         }
-          
-      //for (byte i = 0; i < FIELD_COUNT; i++) {  
-        //~ s = s + fields[i] + ":" + data[i].trim() + "\n";
-      //}
-      System.err.println(s);
-      return s;
+        final Address a = this.address;
+        String s = "reader: BE";
+        s += "\nname: " + i.name;
+        s += "\nfirstName: " + str2yaml(i.firstName);
+        s += "\nmiddleName: " + str2yaml(i.middleName);
+        s += "\nnationality: " + str2yaml(i.nationality);
+        s += "\nplaceOfBirth: " + str2yaml(i.placeOfBirth);
+        s += "\ndateOfBirth: " + cal2date(i.dateOfBirth);
+        s += "\ngender: " + i.gender.toString();
+        s += "\nnationalNumber: " + i.nationalNumber;
+        s += "\ncardNumber: " + i.cardNumber;
+        s += "\nchipNumber: " + i.chipNumber;
+        s += "\ncardDeliveryMunicipality: " + i.cardDeliveryMunicipality;
+        s += "\nnobleCondition: " + str2yaml(i.nobleCondition);
+        //~ s += "\ndocumentType: " + i.documentType.toString();
+        s += "\ndocumentType: " + Integer.toString(i.documentType.getKey());
+        s += "\nspecialStatus: " + i.specialStatus.toString();
+        s += "\nduplicate: " + str2yaml(i.duplicate);
+        s += String.format("\nspecialOrganisation: %s",i.specialOrganisation);
+        s += "\ncardValidityDateBegin: " + cal2date(i.cardValidityDateBegin);
+        s += "\ncardValidityDateEnd: " + cal2date(i.cardValidityDateEnd);
+        s += "\nstreetAndNumber: " + str2yaml(a.streetAndNumber);
+        s += "\nzip: " + a.zip;
+        s += "\nmunicipality: " + a.municipality;
+        if (this.photo.length > 0) {
+            byte[] enc = Base64.encodeBase64(this.photo);
+            s += "\nphoto: " + new String(enc);
+        }
+        System.out.println(s);
+        return s;
     }  
   
 }
 
 public class EIDReader extends Applet {
       
+    public static void main(String[] args) { 
+        System.out.println("EIDReader main()");
+    }
+
     public void init() {
         // System.err.println("Gonna disable the security manager...");
         // System.setSecurityManager(null);
@@ -428,8 +428,8 @@ public class EIDReader extends Applet {
     public String readCard() 
     {
         System.err.println("EIDReader.readCard()");
-        return (String) AccessController.doPrivileged(new PrivilegedAction() { 
-            public Object run() {
+        return AccessController.doPrivileged(new PrivilegedAction<String>() { 
+            public String run() {
                 try {
                     TerminalFactory factory = TerminalFactory.getDefault();  
                     List<CardTerminal> terminals = factory.terminals().list();          

@@ -7,11 +7,10 @@
 #~ requires eid-applet-service-1.0.1.GA.jar downloaded 
 #~ from http://code.google.com/p/eid-applet/
 
-#~ JFLAGS = -d build -sourcepath src
-#~ JFLAGS = -Xlint:unchecked 
-#~ JFLAGS = -classpath ~/Downloads/eid-applet-sdk/eid-applet-service-1.0.1.GA.jar
-# JFLAGS =
-JFLAGS = -classpath applets/eid-applet-service.jar:applets/commons-codec.jar
+JFLAGS =
+# JFLAGS = -d build -sourcepath src
+# JFLAGS = -Xlint:unchecked 
+JFLAGS = -Xlint:unchecked  -classpath applets/eid-applet-service.jar:applets/commons-codec.jar
 
 
 JC = javac
@@ -45,8 +44,8 @@ jars: classes
 
 
 clean:
-	rm src/eidreader/*.class
-	rm $(JARFILE) applets/EIDReader-unsigned.jar
+	rm -f src/eidreader/*.class
+	rm -f $(JARFILE) applets/EIDReader-unsigned.jar
 
 sync:
 	cp -vur applets/* ~/vbshared2/drives/T/applets/
