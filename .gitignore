@@ -1,8 +1,6 @@
 *.class
 
 # Package Files #
-commons-*.jar
-eid-applet-*.jar
 *.war
 *.ear
 *.pyc

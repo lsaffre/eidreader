@@ -1,4 +1,4 @@
-XPIFILE = ../../applets/eidreader.xpi
+XPIFILE = ../../example/eidreader.xpi
 
 default: xpi
 

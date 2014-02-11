@@ -10,7 +10,7 @@
 JFLAGS =
 # JFLAGS = -d build -sourcepath src
 # JFLAGS = -Xlint:unchecked 
-JFLAGS = -Xlint:unchecked  -classpath applets/eid-applet-service.jar:applets/commons-codec.jar
+JFLAGS = -Xlint:unchecked  -classpath example/eid-applet-service.jar:example/commons-codec.jar
 
 
 JC = javac
@@ -22,7 +22,7 @@ ALIAS = codegears
 .java.class:
 	$(JC) $(JFLAGS) $*.java
 
-JARFILE = applets/EIDReader.jar
+JARFILE = example/EIDReader.jar
 
 SIGNERFLAGS = -tsa http://timestamp.globalsign.com/scripts/timestamp.dll -storepass "`cat ~/.secret/.keystore_password`"
 
@@ -35,17 +35,17 @@ default: jars
 classes: $(SOURCES:.java=.class)
 
 jars: classes
-#	jar cvfm applets/EIDReader-unsigned.jar $(OBJECTS)
+#	jar cvfm example/EIDReader-unsigned.jar $(OBJECTS)
 	jar cvfm $(JARFILE) $(OBJECTS)
 	jarsigner $(SIGNERFLAGS) $(JARFILE) $(ALIAS)
-	jarsigner $(SIGNERFLAGS) applets/eid-applet-service.jar $(ALIAS)
-	jarsigner $(SIGNERFLAGS) applets/commons-codec.jar $(ALIAS)
-	jarsigner $(SIGNERFLAGS) applets/commons-logging.jar $(ALIAS)
+	jarsigner $(SIGNERFLAGS) example/eid-applet-service.jar $(ALIAS)
+	jarsigner $(SIGNERFLAGS) example/commons-codec.jar $(ALIAS)
+	jarsigner $(SIGNERFLAGS) example/commons-logging.jar $(ALIAS)
 
 
 clean:
 	rm -f src/eidreader/*.class
-	rm -f $(JARFILE) applets/EIDReader-unsigned.jar
+	rm -f $(JARFILE) example/EIDReader-unsigned.jar
 
 xpi:
 	cd firefox/eidreader ; make xpi

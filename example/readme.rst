@@ -1,5 +1,5 @@
-The `applets
-<https://github.com/lsaffre/eidreader/tree/master/applets>`__
+The `example
+<https://github.com/lsaffre/eidreader/tree/master/example>`__
 directory is distributed as a part of :ref:`eidreader` project in
 order to facilitate deployment.
 
@@ -28,12 +28,12 @@ Both commons projects are licensed under the `Apache license 2.0
 <http://www.apache.org/licenses/LICENSE-2.0>`_ which states that we
 "must give any other recipients of the Work or Derivative Works a
 copy of this License", so here it is:
-`LICENSE-2.0.txt <https://github.com/lsaffre/eidreader/blob/master/applets/LICENSE-2.0.txt>`__.
+`LICENSE-2.0.txt <https://github.com/lsaffre/eidreader/blob/master/example/LICENSE-2.0.txt>`__.
 
 AFAICS I don't need to also redistribute the source code of these jar
 files, but here is how you can get them yourself::
 
-  $ cd eidreader/applets
+  $ cd eidreader/example
   $ ./get_jars.sh
   
 The `.jar` files have then been built using the 
@@ -50,10 +50,10 @@ The :file:`get_jars.sh` script will:
     <http://code.google.com/p/eid-applet/downloads/list>`__
     and extract :file:`eid-applet-service-VERSION.jar`
     into a file :file:`eid-applet-service.jar` in your 
-    :file:`applets` directory.
+    :file:`example` directory.
     For example something like::
 
-        $ cd eidreader/applets
+        $ cd eidreader/example
         $ wget http://eid-applet.googlecode.com/files/eid-applet-sdk-1.1.0.GA.zip
         $ unzip eid-applet-sdk-1.1.0.GA.zip
         $ mv eid-applet-sdk-1.1.0.GA/eid-applet-service-1.1.0.GA.jar eid-applet-service.jar
@@ -65,7 +65,7 @@ The :file:`get_jars.sh` script will:
     <http://commons.apache.org/proper/commons-logging/apidocs/org/apache/commons/logging/LogFactory.html>`_
     from 
     `commons.apache.org <http://commons.apache.org/proper/commons-logging/download_logging.cgi>`_
-    and extract a file `commons-logging.jar` from it to your `applets` directory.
+    and extract a file `commons-logging.jar` from it to your `example` directory.
     For example something like::
 
         $ wget http://servingzone.com/mirrors/apache//commons/logging/binaries/commons-logging-1.1.3-bin.tar.gz
@@ -77,7 +77,7 @@ The :file:`get_jars.sh` script will:
 -   Download an appropriate version of     
     `commons-codec
     <http://commons.apache.org/proper/commons-codec/>`_
-    and extract a file `commons-codec.jar` from it to your `applets` directory.
+    and extract a file `commons-codec.jar` from it to your `example` directory.
 
 
         $ wget http://servingzone.com/mirrors/apache//commons/codec/binaries/commons-codec-1.8-bin.tar.gz
