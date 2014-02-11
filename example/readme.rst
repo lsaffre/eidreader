@@ -1,12 +1,11 @@
-The `applets <https://github.com/lsaffre/eidreader/tree/master/applets>`__
-directory is distributed as a part of 
-:ref:`eidreader` project in order to facilitate the
-deployment process.  
+The `applets
+<https://github.com/lsaffre/eidreader/tree/master/applets>`__
+directory is distributed as a part of :ref:`eidreader` project in
+order to facilitate deployment.
 
 It contains a set of ready-to use signed `.jar` files and some `.html`
 files which are publically served at
 http://test-eidreader.lino-framework.org/
-
 
 Note about redistributing third-party jar files
 -----------------------------------------------
@@ -32,11 +31,7 @@ copy of this License", so here it is:
 `LICENSE-2.0.txt <https://github.com/lsaffre/eidreader/blob/master/applets/LICENSE-2.0.txt>`__.
 
 AFAICS I don't need to also redistribute the source code of these jar
-files, but here is how you can get them yourself:
-
-Download some third-party `.jar` files (which are used only to read
-*Belgian* cards, but I am not sure whether the applet works for
-Estonian cards if they are not present)::
+files, but here is how you can get them yourself::
 
   $ cd eidreader/applets
   $ ./get_jars.sh

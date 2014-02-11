@@ -7,7 +7,7 @@ function readCard() {
   console.log('Going to call document.applets.EIDReader.readCard()');
   console.log(document.applets.EIDReader);
   console.log(document.applets.EIDReader.isActive);
-  var data = document.applets.EIDReader.readCard();
+  var data = document.applets.EIDReader.readCard(false);
   console.log(data);
   alert(data);
 }

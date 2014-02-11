@@ -37,18 +37,15 @@ classes: $(SOURCES:.java=.class)
 jars: classes
 #	jar cvfm applets/EIDReader-unsigned.jar $(OBJECTS)
 	jar cvfm $(JARFILE) $(OBJECTS)
-#	jarsigner $(SIGNERFLAGS) $(JARFILE) $(ALIAS)
-#	jarsigner $(SIGNERFLAGS) applets/eid-applet-service.jar $(ALIAS)
-#	jarsigner $(SIGNERFLAGS) applets/commons-codec.jar $(ALIAS)
-#	jarsigner $(SIGNERFLAGS) applets/commons-logging.jar $(ALIAS)
+	jarsigner $(SIGNERFLAGS) $(JARFILE) $(ALIAS)
+	jarsigner $(SIGNERFLAGS) applets/eid-applet-service.jar $(ALIAS)
+	jarsigner $(SIGNERFLAGS) applets/commons-codec.jar $(ALIAS)
+	jarsigner $(SIGNERFLAGS) applets/commons-logging.jar $(ALIAS)
 
 
 clean:
 	rm -f src/eidreader/*.class
 	rm -f $(JARFILE) applets/EIDReader-unsigned.jar
-
-sync:
-	cp -vur applets/* ~/vbshared2/drives/T/applets/
 
 xpi:
 	cd firefox/eidreader ; make xpi

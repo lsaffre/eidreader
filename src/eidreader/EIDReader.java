@@ -124,8 +124,7 @@ class PersonalFile {
     init(channel);  
   }  
   
-  @Override  
-  public String toString() {  
+  public String resultAsString(Boolean full) {  
     String s = "reader: EE\n";
     for (byte i = 0; i < 16; i++) {  
         s = s + fields[i] + ": " + data[i].trim() + "\n";
@@ -352,8 +351,7 @@ class BelgianReader {
 
     
     
-    @Override  
-    public String toString() {  
+    public String resultAsString(Boolean full) {  
         final Identity i = this.identity;
         final Address a = this.address;
         String s = "reader: BE";
@@ -379,9 +377,11 @@ class BelgianReader {
         s += "\nstreetAndNumber: " + str2yaml(a.streetAndNumber);
         s += "\nzip: " + a.zip;
         s += "\nmunicipality: " + a.municipality;
-        if (this.photo.length > 0) {
-            byte[] enc = Base64.encodeBase64(this.photo);
-            s += "\nphoto: " + new String(enc);
+        if (full) {
+            if (this.photo.length > 0) {
+                byte[] enc = Base64.encodeBase64(this.photo);
+                s += "\nphoto: " + new String(enc);
+            }
         }
         System.out.println(s);
         return s;
@@ -425,20 +425,27 @@ public class EIDReader extends Applet {
         System.err.println("Initialized");
     }
     
-    public String readCard() 
+    public String readCard() {
+        return readCard(true);
+    }
+
+    public String readCard(final Boolean full) 
     {
         System.err.println("EIDReader.readCard()");
         return AccessController.doPrivileged(new PrivilegedAction<String>() { 
             public String run() {
                 try {
                     TerminalFactory factory = TerminalFactory.getDefault();  
-                    List<CardTerminal> terminals = factory.terminals().list();          
-                    
+                    List<CardTerminal> terminals = factory.terminals().list();
+          
+                    if (terminals.size() == 0) {
+                        return "Error: No card reader found";
+                    }
                     //~ throws java.lang.IndexOutOfBoundsException when there is no reader
                     CardTerminal terminal = terminals.get(0);  
                     
                     if (! terminal.isCardPresent()){  
-                        return "No card found on terminal";
+                        return "Error: No card found on terminal";
                         //~ return new EidReaderResponse(new String[] { "No card found on terminal" });
                     }
                     // "The best way to go is, as explained by Shane, to use the wildcard protocol."
@@ -454,20 +461,20 @@ public class EIDReader extends Applet {
                     if (BelgianReader.matchesEidAtr(atr)) {
                         System.err.println("It's a Belgian card");
                         BelgianReader pf = new BelgianReader(channel);
-                        return pf.toString();
+                        return pf.resultAsString(full);
                     }
                     
 
                     System.err.println("It's an Estonian card");
                     PersonalFile pf = new PersonalFile(channel);
-                    return pf.toString();
+                    return pf.resultAsString(full);
                     //~ return new String[] { pf.toString() };
                     //~ return new EidReaderResponse(pf.getData());
                     //~ return pf.getSurName();
                 } catch (Throwable e) {
                     //~ return new EidReaderResponse(new String[] { e.toString() });
                     e.printStackTrace();
-                    return e.toString();
+                    return "Error: " + e.toString();
                 }
             }
         });
