@@ -1,7 +1,7 @@
 /*
-* See http://lino-framework.org/eidreader/index.html
+* See http://lino-framework.org/eidreader
 * 
-* Copyright 2013 Luc Saffre
+* Copyright 2013-2014 Luc Saffre
 * 
 * This file is part of the EIDReader project.
 * EIDReader is free software; you can redistribute it and/or modify 
@@ -399,7 +399,7 @@ public class EIDReader extends Applet {
         // System.err.println("Gonna disable the security manager...");
         // System.setSecurityManager(null);
         // System.err.println("Security manager has been disabled ");
-        System.err.println("EIDReader initialized");
+        System.err.println("EIDReader version 20140211 initialized");
     }
     
     public void unused2_init() {

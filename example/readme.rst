@@ -7,6 +7,8 @@ It contains a set of ready-to use signed `.jar` files and some `.html`
 files which are publically served at
 http://test-eidreader.lino-framework.org/
 
+.. _third_party_jars:
+
 Note about redistributing third-party jar files
 -----------------------------------------------
 
