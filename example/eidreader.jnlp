@@ -18,8 +18,6 @@
 </resources>
 <applet-desc 
      name="EIDReader"
-     main-class="src.eidreader.EIDReader"
-     width="250"
-     height="50">
+     main-class="src.eidreader.EIDReader">
  </applet-desc>
 </jnlp>
