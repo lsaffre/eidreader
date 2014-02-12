@@ -2,21 +2,37 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <title>EIDReader applet test page</title>
+<script type="text/javascript">
+function readCard() {
+  console.log('Going to call document.applets.EIDReader.readCard()');
+  console.log(document.applets.EIDReader);
+  console.log(document.applets.EIDReader.isActive);
+  var data = document.applets.EIDReader.readCard(false);
+  console.log(data);
+  alert(data);
+}
+</script>
 </head>
 <body>
 
-This is a test page for the 
+<applet name="EIDReader" 
+        code="src.eidreader.EIDReader"
+        codebase="http://test-eidreader.lino-framework.org"
+        width="250" height="50">
+   <param name="jnlp_href" value="eidreader.jnlp">
+   <param name="permissions" value="all-permissions" />
+</applet>
+
+<div>
+
+<p>This is a test page for the 
 <a href="http://lino-framework.org/eidreader/index.html">EIDReader applet</a>.
+</p>
 
+<p><a href="javascript:readCard()">Click here after 
+having inserted your eID card</a></p>
 
-<h2>Tests</h2>
-<ul>
-<li><a href="test_using_jnlp.html">using a `.jnlp` file</a>
-(the only method we are currently interested in)
-</li>
-<li><a href="test_using_jnlp_and_jsdeploy.html">using a `.jnlp` file and javaDeploy.js</a></li>
-<li><a href="test.html">using a plain `applet` tag</a></li>
-</ul>
+</div>
 
 </body>
 </html>
