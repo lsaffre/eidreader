@@ -24,8 +24,19 @@ function readCard() {
 
 <div>
 
-<p><a href="javascript:readCard()">Click here after 
-having inserted your eID card</a></p>
+<p><a href="javascript:readCard()">Click here</a> 
+to run EIDReader.readCard()</p>
+
+<ul>
+<li>First invocation might take some time of non-responsiveness 
+because Java checks our applet's signature</li>
+<li>If you have no card inserted, you should get 
+a JavaScript alert "Error: No card found on terminal"
+</li>
+<li>If you have inserted a Belgian eID card, 
+you should get a  JavaScript alert with the content of your eID card.
+</li>
+</ul>
 
 <p>This is a test page for the 
 <a href="http://lino-framework.org/eidreader/index.html">EIDReader applet</a>.
