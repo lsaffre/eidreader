@@ -399,7 +399,7 @@ public class EIDReader extends Applet {
         // System.err.println("Gonna disable the security manager...");
         // System.setSecurityManager(null);
         // System.err.println("Security manager has been disabled ");
-        System.err.println("EIDReader version 20140211 initialized");
+        System.err.println("EIDReader version 20140213 initialized");
     }
     
     public void unused2_init() {
