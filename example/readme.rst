@@ -79,7 +79,7 @@ The :file:`get_jars.sh` script will:
 -   Download an appropriate version of     
     `commons-codec
     <http://commons.apache.org/proper/commons-codec/>`_
-    and extract a file `commons-codec.jar` from it to your `example` directory.
+    and extract a file `commons-codec.jar` from it to your `example` directory::
 
 
         $ wget http://servingzone.com/mirrors/apache//commons/codec/binaries/commons-codec-1.8-bin.tar.gz
