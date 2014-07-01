@@ -1,0 +1,52 @@
+#~ requires eid-applet-service-1.0.1.GA.jar downloaded 
+#~ from http://code.google.com/p/eid-applet/
+
+JFLAGS =
+# JFLAGS = -d build -sourcepath src
+# JFLAGS = -Xlint:unchecked 
+JFLAGS = -Xlint:unchecked  -classpath example/eid-applet-service.jar:example/commons-codec.jar
+
+JC = javac
+
+.SUFFIXES: .java .class
+
+.java.class:
+	$(JC) $(JFLAGS) $*.java
+
+JARFILE = EIDReader.jar
+SOURCES = src/eidreader/EIDReader.java
+
+OBJECTS = Manifest.txt $(SOURCES:.java=*.class) src/eidreader/PersonalFile.class src/eidreader/BelgianReader.class src/eidreader/EstEIDUtil.class
+
+default: jars_codegears jars_mykey
+
+classes: $(SOURCES:.java=.class)
+
+jars_mykey: classes
+	export SIGNERFLAGS = -storepass "`cat ~/.secret/.keystore_password`"
+	export ALIAS = mykey
+	export JARDIR = 
+	jar cvfm example/mykey/$(JARFILE) $(OBJECTS)
+	jarsigner $(SIGNERFLAGS) $(JARDIR)/$(JARFILE) $(ALIAS)
+	jarsigner $(SIGNERFLAGS) $(JARDIR)/eid-applet-service.jar $(ALIAS)
+	jarsigner $(SIGNERFLAGS) $(JARDIR)/commons-codec.jar $(ALIAS)
+	jarsigner $(SIGNERFLAGS) $(JARDIR)/commons-logging.jar $(ALIAS)
+
+jars_codegears: classes
+	export SIGNERFLAGS=-tsa http://timestamp.globalsign.com/scripts/timestamp.dll -storepass "`cat ~/.secret/.keystore_password`"
+	export ALIAS = codegears
+	export JARDIR = example/$(ALIAS)s
+	jar cvfm $(JARDIR)/$(JARFILE) $(OBJECTS)
+	jarsigner $(SIGNERFLAGS) $(JARDIR)/$(JARFILE) $(ALIAS)
+	jarsigner $(SIGNERFLAGS) $(JARDIR)/eid-applet-service.jar $(ALIAS)
+	jarsigner $(SIGNERFLAGS) $(JARDIR)/commons-codec.jar $(ALIAS)
+	jarsigner $(SIGNERFLAGS) $(JARDIR)/commons-logging.jar $(ALIAS)
+
+clean:
+	rm -f src/eidreader/*.class
+	rm -f example/mykey/*.jar
+	rm -f example/codegears/*.jar
+
+xpi:
+	cd firefox/eidreader ; make xpi
+

@@ -1,3 +1,13 @@
+#
+#
+#
+#
+# THIS FILE IS NO LONGER USED. Use `paver jars` instead.
+#
+#
+#
+#
+
 #~ how to generate a self-signed key:
 #~ keytool -genkey
 #~ keytool -selfcert
