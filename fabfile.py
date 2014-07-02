@@ -1,9 +1,9 @@
+from __future__ import print_function
+
 from atelier.fablib import *
 setup_from_project()
 
 env.use_mercurial = False  # i.e. use git
-
-import shutil
 
 JARFILE = 'EIDReader.jar'
 
@@ -28,20 +28,16 @@ for n in LIBJARS:
 CLASSPATH = ':'.join(CLASSPATH)
 
 
-def update(src, dst):
-    if not dst.exists() or src.mtime() - dst.mtime() > 1:
-        shutil.copy2(src, dst)
-
-
 def sign_jars(outdir, alias, flags):
     jarfile = outdir.child(JARFILE)
-    m = max([f.mtime() for f in CLASSES])
-    if not jarfile.exists() or jarfile.mtime() < m:
+    if jarfile.needs_update(CLASSES):
         local("jar cvfm %s %s" % (jarfile, ' '.join(CLASSES)))
     local("jarsigner %s %s %s" % (flags, jarfile, alias))
     for n in LIBJARS:
         jarfile = outdir.child(n)
-        update(LIBDIR.child(n), jarfile)
+        libfile = LIBDIR.child(n)
+        if libfile.needs_update([jarfile]):
+            libfile.copy(jarfile)
         local("jarsigner %s %s %s" % (flags, jarfile, alias))
 
 
