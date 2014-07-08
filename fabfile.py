@@ -15,12 +15,16 @@ LIBJARS = ['eid-applet-service.jar',
            'commons-codec.jar',
            'commons-logging.jar']
 
-CLASSES = [Path('Manifest.txt')]
-for src in SOURCES:
-    CLASSES.append(Path(src.replace('.java', '.class')))
+JARCONTENT = [Path('Manifest.txt')]
 
-for n in ['PersonalFile', 'BelgianReader', 'EstEIDUtil']:
-    CLASSES.append(SOURCEDIR.child(n + '.class'))
+JARCONTENT += list(SOURCEDIR.listdir('*.class'))
+# for src in SOURCES:
+#     JARCONTENT.append(Path(src.replace('.java', '.class')))
+# for n in ['PersonalFile', 'BelgianReader', 'EstEIDUtil', 'EIDReader$1']:
+#     JARCONTENT.append(SOURCEDIR.child(n + '.class'))
+
+# http://stackoverflow.com/questions/12023490/inner-classes-not-being-included-in-jar-file
+JARCONTENT = [Path(x.replace("$", "\\$")) for x in JARCONTENT]
 
 CLASSPATH = []
 for n in LIBJARS:
@@ -30,8 +34,8 @@ CLASSPATH = ':'.join(CLASSPATH)
 
 def sign_jars(outdir, alias, flags):
     jarfile = outdir.child(JARFILE)
-    if jarfile.needs_update(CLASSES):
-        local("jar cvfm %s %s" % (jarfile, ' '.join(CLASSES)))
+    if jarfile.needs_update(JARCONTENT):
+        local("jar cvfm %s %s" % (jarfile, ' '.join(JARCONTENT)))
     local("jarsigner %s %s %s" % (flags, jarfile, alias))
     for n in LIBJARS:
         jarfile = outdir.child(n)
@@ -52,9 +56,9 @@ def classes():
 def jars():
     classes()
     flags = '-storepass "`cat ~/.secret/.keystore_password`"'
-    sign_jars(Path('example'), 'mykey', flags)
-
     flags += ' -tsa http://timestamp.globalsign.com/scripts/timestamp.dll'
+
+    sign_jars(Path('example'), 'mykey', flags)
     sign_jars(Path('example/signed'), 'codegears', flags)
 
 
