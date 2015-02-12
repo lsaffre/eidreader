@@ -1,9 +1,9 @@
 from __future__ import print_function
 
 from atelier.fablib import *
-setup_from_project()
+setup_from_fabfile(globals())
 
-env.use_mercurial = False  # i.e. use git
+env.revision_control_system = 'git'
 
 jb = JarBuilder('EIDReader.jar', 'src/eidreader')
 
@@ -21,4 +21,4 @@ def classes():
 def jars():
     classes()
     jb.build_jar('example', 'mykey')
-    jb.build_jar('example/signed', 'codegears')
+    # jb.build_jar('example/signed', 'codegears')
