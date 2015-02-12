@@ -1,11 +1,12 @@
-from __future__ import print_function
-
 from atelier.fablib import *
 setup_from_fabfile(globals())
 
 env.revision_control_system = 'git'
 
-jb = JarBuilder('EIDReader.jar', 'src/eidreader')
+from atelier.jarbuilder import JarBuilder
+jb = JarBuilder(
+    'EIDReader.jar', 'src/eidreader',
+    'http://timestamp.globalsign.com/scripts/timestamp.dll')
 
 jb.add_lib("libs/eid-applet-service.jar")
 jb.add_lib("libs/commons-codec.jar")
